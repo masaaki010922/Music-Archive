@@ -7,13 +7,21 @@ st.title("私のAIアプリ")
 api_key = st.secrets["GEMINI_API_KEY"]
 client = genai.Client(api_key=api_key)
 
+# ---------------------------------------------------------
+# 【ここが重要！】AI Studioの「System Instructions」を以下に貼り付けます
+# ---------------------------------------------------------
+my_instruction = """
+ここにAI Studioからコピーした文章をそのまま貼り付けてください
+"""
+# ---------------------------------------------------------
+
 user_input = st.text_input("AIに聞きたいことを入力してね")
 
 if st.button("送信"):
     if user_input:
-        # Gemini 2.0 Flash という最新モデルを使います
         response = client.models.generate_content(
             model="gemini-2.0-flash",
+            config={'system_instruction': my_instruction},
             contents=user_input
         )
         st.write(response.text)
